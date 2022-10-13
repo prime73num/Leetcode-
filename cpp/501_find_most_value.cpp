@@ -2,7 +2,8 @@
 
 
 
-// Accepted
+
+
 
 
 #include <iostream>
@@ -22,24 +23,45 @@ struct TreeNode {
 
 class Solution {
   private:
+    int count;
     int most;
+    vector<int> res;
     TreeNode* pre;
     void travel(TreeNode* root){
       if(root==nullptr)
         return;
       travel(root->left);
+
       if(pre != nullptr){
-        int temp = root->val - pre->val;
-        most = temp < most ? temp:most;
+        if(root->val != pre->val){
+          if(most < count){
+            most = count;
+            res.clear();
+            res.push_back(pre->val);
+          } else if(most == count){
+            res.push_back(pre->val);
+          }
+          count = 0;
+        }
       }
+      count++;
       pre = root;
       travel(root->right);
     }
   public:
-    int getMinimumDifference(TreeNode* root) {
-      most = INT_MAX;
+    vector<int> findMode(TreeNode* root) {
       pre = nullptr;
+      count = 0;
+      most = INT_MIN;
+      res.clear();
       travel(root);
-      return most;
+      if(most < count){
+        most = count;
+        res.clear();
+        res.push_back(pre->val);
+      } else if(most == count){
+        res.push_back(pre->val);
+      }
+      return res;
     }
 };

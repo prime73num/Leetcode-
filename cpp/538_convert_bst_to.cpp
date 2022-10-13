@@ -1,15 +1,11 @@
 
-
-
-
-// Accepted
-
-
 #include <iostream>
 #include <vector>
 #include <stack>
 
 using namespace std;
+
+
 
 struct TreeNode {
     int val;
@@ -22,24 +18,18 @@ struct TreeNode {
 
 class Solution {
   private:
-    int most;
-    TreeNode* pre;
+    int sum;
     void travel(TreeNode* root){
-      if(root==nullptr)
-        return;
-      travel(root->left);
-      if(pre != nullptr){
-        int temp = root->val - pre->val;
-        most = temp < most ? temp:most;
-      }
-      pre = root;
+      if(root == nullptr) return;
       travel(root->right);
+      sum += root->val;
+      root->val = sum;
+      travel(root->left);
     }
   public:
-    int getMinimumDifference(TreeNode* root) {
-      most = INT_MAX;
-      pre = nullptr;
+    TreeNode* convertBST(TreeNode* root) {
+      sum = 0;
       travel(root);
-      return most;
+      return root;
     }
 };
